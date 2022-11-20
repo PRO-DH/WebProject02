@@ -7,6 +7,7 @@ import com.example.demo.todo.service.TodoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,23 +22,30 @@ public class TodoApiController {
 
     // 할 일 목록 전체조회 요청
     @GetMapping
-    public FindAllDTO todos() {
+    public ResponseEntity<?> todos() {
         log.info("/api/todos GET request!");
-
-        FindAllDTO findAllDTO = service.findAllServ();
-
-        return findAllDTO;
+        return ResponseEntity.ok().body(service.findAllServ());
     }
+
 
 
     // 할 일 목록 등록 요청
     @PostMapping
-    public FindAllDTO create(@RequestBody ToDo newTodo){
+    public ResponseEntity<?> create(@RequestBody ToDo newTodo) {
+        // Rest Controller 의 반환값은 무조건 ResponseEntity<>로 해야 상태코드를 보낼 수 있다.
+
         newTodo.setUserId("noname");
         log.info("/api/todos POST request! - {}", newTodo);
 
-       FindAllDTO dto = service.createServ(newTodo);
+        try {
+            FindAllDTO dto = service.createServ(newTodo);
+            if (dto == null) {
+                return ResponseEntity.notFound().build();
+            }
+            return ResponseEntity.ok().body(dto);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
 
-        return dto;
     }
 }

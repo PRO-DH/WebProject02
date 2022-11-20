@@ -41,6 +41,6 @@ public class TodoService {
         // flag가 true 일때만 저장
 
         return flag ? findAllServ() : null;
-        // flag 가 true 일때만 findAllServ return, false면 null return.
+        // flag 가 true 일때만 findAllServ return, false null return.
     }
 }
