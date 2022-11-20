@@ -2,6 +2,8 @@ package com.example.demo.todo.entity;
 
 import lombok.*;
 
+// DB에 들어가는 데이터, 민감한 정보도 다 있어야한다. -> 저장할때 쓰는 것이다. (TodoDto와 다른점.)
+
 @Setter @Getter @ToString
 @NoArgsConstructor // 기본 생성자
 @AllArgsConstructor // 전체 필드 초기화 생성자
