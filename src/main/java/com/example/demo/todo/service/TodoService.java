@@ -2,14 +2,12 @@ package com.example.demo.todo.service;
 
 
 import com.example.demo.todo.dto.FindAllDTO;
-import com.example.demo.todo.dto.TodoDto;
 import com.example.demo.todo.entity.ToDo;
 import com.example.demo.todo.repository.TodoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 // 역할: 컨트롤러와 저장소 사이의 잡일 처리 역할
@@ -29,9 +27,11 @@ public class TodoService {
         return new FindAllDTO(repository.findAll());
     }
 
+
+    // 목록 생성 service
     public FindAllDTO createServ(final ToDo newTodo) {
 
-        if (newTodo == null){
+        if (newTodo == null) {
             log.warn("newTodo cannot be null!");
             throw new RuntimeException("newTodo cannot be null!");
         }   // 에러 방지 코드 - 안전장치 secure code
@@ -43,4 +43,24 @@ public class TodoService {
         return flag ? findAllServ() : null;
         // flag 가 true 일때만 findAllServ return, false null return.
     }
+
+
+    //목록 삭제하기 service
+    public FindAllDTO deleteServ(long id) {
+        boolean flag = repository.remove(id);
+
+        // !flag = flag가 false 라면
+        if (!flag) {
+            log.warn("delete fail!! not found id {}", id);
+            throw new RuntimeException("delete fail!");
+        }
+        return findAllServ();
+    }
+
+
+    // 목록 하나만 찾기 service
+    public FindAllDTO findOneServ(int number) {
+        return new FindAllDTO((List<ToDo>) repository.findOne(number));
+    }
 }
+
