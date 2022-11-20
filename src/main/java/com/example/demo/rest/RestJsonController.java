@@ -1,14 +1,15 @@
 package com.example.demo.rest;
 
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import lombok.*;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/json")
+@Slf4j // 로깅라이브러리
 public class RestJsonController {
     /**
      * 로그 레벨
@@ -19,9 +20,28 @@ public class RestJsonController {
      * error - 심각한 에러 로깅
      */
     @PostMapping("/major")
-    public List<String> major() {
-        System.out.println("/json/major POST request!");
+    public List<String> major(@RequestBody List<String> majorList) {
+        log.info("/json/major POST request! - {}", majorList);
         return null;
+    }
+
+    @PutMapping("/bbs")
+    public void bbs(@RequestBody Article article){
+        log.info("/json/bbs PUT request! - {}", article);
+    }
+
+    @DeleteMapping("/bbs-list")
+    public void bbsList(@RequestBody List<Article> list) {
+        log.info("/json/bbs-list DELETE request! - {}", list);
+    }
+
+    @Getter @Setter @ToString @NoArgsConstructor @AllArgsConstructor
+    public static class Article{
+
+        private long id;
+        private String title;
+        private String content;
+        private String writer;
     }
 
 }
