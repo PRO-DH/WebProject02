@@ -14,7 +14,7 @@ import java.util.List;
 @RestController
 @Slf4j
 @RequestMapping("/api/todos")
-@RequiredArgsConstructor
+@RequiredArgsConstructor    // 필요한 것 주입안해도 자동으로 가져온다.
 public class TodoApiController {
 
     private final TodoRepository repository;
