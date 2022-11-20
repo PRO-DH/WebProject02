@@ -1,13 +1,21 @@
 package com.example.demo.todo.dto;
 
+import com.example.demo.todo.entity.ToDo;
 import lombok.*;
 
-// 수많은 정보 중 보여주고 싶은 정보만 보여준다.(entity 패키지의 ToDo와 다른점)
-
-@Setter @Getter @ToString @NoArgsConstructor @AllArgsConstructor
+@Setter @Getter @ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class TodoDto {
 
     private long id;
     private String title;
     private boolean done;
+
+    // ToDo에서 TodoDto가 필요한 필드를 빼오는 생성자
+    public TodoDto(ToDo toDo) {
+        this.id = toDo.getId();
+        this.title = toDo.getTitle();
+        this.done = toDo.isDone();
+    }
 }
