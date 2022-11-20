@@ -7,9 +7,7 @@ import com.example.demo.todo.service.TodoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -29,5 +27,17 @@ public class TodoApiController {
         FindAllDTO findAllDTO = service.findAllServ();
 
         return findAllDTO;
+    }
+
+
+    // 할 일 목록 등록 요청
+    @PostMapping
+    public FindAllDTO create(@RequestBody ToDo newTodo){
+        newTodo.setUserId("noname");
+        log.info("/api/todos POST request! - {}", newTodo);
+
+       FindAllDTO dto = service.createServ(newTodo);
+
+        return dto;
     }
 }
