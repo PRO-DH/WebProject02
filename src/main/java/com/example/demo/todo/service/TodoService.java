@@ -66,7 +66,9 @@ public class TodoService {
 
         log.info("findOneServ return data - {}", toDo);
 
-        return new TodoDto((toDo));
+        return toDo != null ? new TodoDto((toDo)) : null; // todo가 null이 아닐때만 new TodoDto todo 리턴하고 아니면 null 리턴한다.
+
+
     }
 }
 
