@@ -73,10 +73,17 @@ public class TodoApiController {
     // 할 일 개별 조회 요청
     // URI : /api/todos/3 => 3번 할 일 조회해서 클라이언트에게 리턴
 
-    @GetMapping("{number}")
-    public ResponseEntity<?> find(int number){
-        log.info("/api/todos/%d Get REQUEST!",number);
-        return ResponseEntity.ok().body(service.findOneServ(number));
+    @GetMapping("/{id}")
+    public ResponseEntity<?> findOne(@PathVariable Long id){
+        log.info("/api/todos/{} Get request!",id);
+
+        if (id == null || id < 0 ) return ResponseEntity.badRequest().build();
+
+        TodoDto dto = service.findOneServ(id);
+
+        if (dto == null) return ResponseEntity.notFound().build();
+
+        return ResponseEntity.ok().body(dto);
     }
 
 }

@@ -2,6 +2,7 @@ package com.example.demo.todo.service;
 
 
 import com.example.demo.todo.dto.FindAllDTO;
+import com.example.demo.todo.dto.TodoDto;
 import com.example.demo.todo.entity.ToDo;
 import com.example.demo.todo.repository.TodoRepository;
 import lombok.RequiredArgsConstructor;
@@ -59,8 +60,13 @@ public class TodoService {
 
 
     // 목록 하나만 찾기 service
-    public FindAllDTO findOneServ(int number) {
-        return new FindAllDTO((List<ToDo>) repository.findOne(number));
+    public TodoDto findOneServ(long id) {
+
+        ToDo toDo = repository.findOne(id);
+
+        log.info("findOneServ return data - {}", toDo);
+
+        return new TodoDto((toDo));
     }
 }
 
