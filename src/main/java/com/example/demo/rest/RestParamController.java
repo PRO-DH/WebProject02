@@ -47,8 +47,9 @@ public class RestParamController {
     }
 
     @GetMapping("/user4/{userNum}")
-    public String user4(@PathVariable int userNum){ // ? 뒤의 userNum 말고 / 뒤의 userNum을 읽기위해 pathvariable 추가
-        return String.format("회원번호는 %d번입니다.",userNum);
+//    @RequestMapping(value = "/user4/{userNum}", method = RequestMethod.GET)
+    public String user4(@PathVariable("userNum") int num) {
+        return String.format("회원번호는 %d번입니다.", num);
     }
 
 

@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 // 역할: 컨트롤러와 저장소 사이의 잡일 처리 역할
@@ -24,51 +26,54 @@ public class TodoService {
          1. 컨트롤러에게 userId를 뺀 할일 리스트를 전달한다.
          2. 할일 목록의 카운트를 세서 따로 추가해서 전달한다.
      */
-    public FindAllDTO findAllServ() {
-        return new FindAllDTO(repository.findAll());
+    public FindAllDTO findAllServ(String userId) {
+        return new FindAllDTO(repository.findAll(userId));
     }
 
-
-    // 목록 생성 service
     public FindAllDTO createServ(final ToDo newTodo) {
 
         if (newTodo == null) {
             log.warn("newTodo cannot be null!");
             throw new RuntimeException("newTodo cannot be null!");
-        }   // 에러 방지 코드 - 안전장치 secure code
+        }
 
         boolean flag = repository.save(newTodo);
-        if (flag) log.info("새로운 할일 [Id : {}] 이 저장되었습니다.", newTodo.getId());
-        // flag가 true 일때만 저장
+        if (flag) log.info("새로운 할일 [Id: {}]이 저장되었습니다.", newTodo.getId());
 
-        return flag ? findAllServ() : null;
-        // flag 가 true 일때만 findAllServ return, false null return.
+        return flag ? findAllServ(newTodo.getUserId()) : null;
     }
 
+    public FindAllDTO deleteServ(String id, String userId) {
 
-    //목록 삭제하기 service
-    public FindAllDTO deleteServ(long id) {
+        int x = 10, y = 20;
+//        System.out.println(false & y++ == 21);
+
+
         boolean flag = repository.remove(id);
 
-        // !flag = flag가 false 라면
+        // 삭제 실패한 경우
         if (!flag) {
-            log.warn("delete fail!! not found id {}", id);
+            log.warn("delete fail!! not found id [{}]", id);
             throw new RuntimeException("delete fail!");
         }
-        return findAllServ();
+        return findAllServ(userId);
     }
 
 
-    // 목록 하나만 찾기 service
-    public TodoDto findOneServ(long id) {
+
+    public TodoDto findOneServ(String id) {
 
         ToDo toDo = repository.findOne(id);
-
         log.info("findOneServ return data - {}", toDo);
 
-        return toDo != null ? new TodoDto((toDo)) : null; // todo가 null이 아닐때만 new TodoDto todo 리턴하고 아니면 null 리턴한다.
 
-
+        return toDo != null ? new TodoDto(toDo) : null;
     }
-}
 
+    public FindAllDTO update(ToDo toDo) {
+
+        boolean flag = repository.modify(toDo);
+        return flag ? findAllServ(toDo.getUserId()) : new FindAllDTO();
+    }
+
+}
